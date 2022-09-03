@@ -1,0 +1,74 @@
+Dim smtpServer As String = _  
+  Dts.Variables("HtmlEmailServer").Value.ToString
+  Dim smtpConnectionString As String = _  
+  DirectCast(Dts.Connections("SMTP Connection Manager").AcquireConnection(Dts.Transaction), String)  
+Dim smtpServer As String = _  
+  smtpConnectionString.Split(New Char() {"="c, ";"c})(1)
+  Public Sub Main()  
+  
+  Dim htmlMessageFrom As String = _  
+    Dts.Variables("HtmlEmailFrom").Value.ToString  
+  Dim htmlMessageTo As String = _  
+    Dts.Variables("HtmlEmailTo").Value.ToString  
+  Dim htmlMessageSubject As String = _  
+    Dts.Variables("HtmlEmailSubject").Value.ToString  
+  Dim htmlMessageBody As String = _  
+    Dts.Variables("HtmlEmailBody").Value.ToString  
+  Dim smtpServer As String = _  
+    Dts.Variables("HtmlEmailServer").Value.ToString  
+  
+  SendMailMessage( _  
+      htmlMessageFrom, htmlMessageTo, _  
+      htmlMessageSubject, htmlMessageBody, _  
+      True, smtpServer)  
+  
+  Dts.TaskResult = ScriptResults.Success  
+  
+End Sub  
+  
+Private Sub SendMailMessage( _  
+    ByVal From As String, ByVal SendTo As String,  _  
+    ByVal Subject As String, ByVal Body As String, _  
+    ByVal IsBodyHtml As Boolean, ByVal Server As String)  
+  
+  Dim htmlMessage As MailMessage  
+  Dim mySmtpClient As SmtpClient  
+  
+  htmlMessage = New MailMessage( _  
+    From, SendTo, Subject, Body)  
+  htmlMessage.IsBodyHtml = IsBodyHtml  
+  
+  mySmtpClient = New SmtpClient(Server)  
+  mySmtpClient.Credentials = CredentialCache.DefaultNetworkCredentials  
+  mySmtpClient.Send(htmlMessage)  
+  
+End Sub
+public void Main()  
+        {  
+  
+            string htmlMessageFrom = Dts.Variables["HtmlEmailFrom"].Value.ToString();  
+            string htmlMessageTo = Dts.Variables["HtmlEmailTo"].Value.ToString();  
+            string htmlMessageSubject = Dts.Variables["HtmlEmailSubject"].Value.ToString();  
+            string htmlMessageBody = Dts.Variables["HtmlEmailBody"].Value.ToString();  
+            string smtpServer = Dts.Variables["HtmlEmailServer"].Value.ToString();  
+  
+            SendMailMessage(htmlMessageFrom, htmlMessageTo, htmlMessageSubject, htmlMessageBody, true, smtpServer);  
+  
+            Dts.TaskResult = (int)ScriptResults.Success;  
+  
+        }  
+  
+        private void SendMailMessage(string From, string SendTo, string Subject, string Body, bool IsBodyHtml, string Server)  
+        {  
+  
+            MailMessage htmlMessage;  
+            SmtpClient mySmtpClient;  
+  
+            htmlMessage = new MailMessage(From, SendTo, Subject, Body);  
+            htmlMessage.IsBodyHtml = IsBodyHtml;  
+  
+            mySmtpClient = new SmtpClient(Server);  
+            mySmtpClient.Credentials = CredentialCache.DefaultNetworkCredentials;  
+            mySmtpClient.Send(htmlMessage);  
+  
+        }
